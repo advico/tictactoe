@@ -3,59 +3,59 @@
 
 #define SIZE 3
 
-// Funções
-void inicializarTabuleiro(char tabuleiro[SIZE][SIZE]);
-void exibirTabuleiro(char tabuleiro[SIZE][SIZE]);
-int verificarVitoria(char tabuleiro[SIZE][SIZE]);
-int verificarEmpate(char tabuleiro[SIZE][SIZE]);
-void realizarJogada(char tabuleiro[SIZE][SIZE], char jogador);
+// Functions
+void initializeBoard(char board[SIZE][SIZE]);
+void displayBoard(char board[SIZE][SIZE]);
+int checkWin(char board[SIZE][SIZE]);
+int checkDraw(char board[SIZE][SIZE]);
+void makeMove(char board[SIZE][SIZE], char player);
 
 int main() {
-    char tabuleiro[SIZE][SIZE];
-    char jogadorAtual = 'X';
-    int vitoria = 0;
+    char board[SIZE][SIZE];
+    char currentPlayer = 'X';
+    int win = 0;
 
-    inicializarTabuleiro(tabuleiro);
+    initializeBoard(board);
 
     while (1) {
         system("clear || cls");
-        exibirTabuleiro(tabuleiro);
+        displayBoard(board);
 
-        realizarJogada(tabuleiro, jogadorAtual);
+        makeMove(board, currentPlayer);
 
-        if (verificarVitoria(tabuleiro)) {
+        if (checkWin(board)) {
             system("clear || cls");
-            exibirTabuleiro(tabuleiro);
-            printf("\nParabéns! O jogador %c venceu!\n", jogadorAtual);
+            displayBoard(board);
+            printf("\nCongratulations! Player %c wins!\n", currentPlayer);
             break;
         }
 
-        if (verificarEmpate(tabuleiro)) {
+        if (checkDraw(board)) {
             system("clear || cls");
-            exibirTabuleiro(tabuleiro);
-            printf("\nEmpate! O tabuleiro está cheio.\n");
+            displayBoard(board);
+            printf("\nIt's a draw! The board is full.\n");
             break;
         }
 
-        jogadorAtual = (jogadorAtual == 'X') ? 'O' : 'X';
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
     }
 
     return 0;
 }
 
-void inicializarTabuleiro(char tabuleiro[SIZE][SIZE]) {
+void initializeBoard(char board[SIZE][SIZE]) {
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
-            tabuleiro[i][j] = ' ';
+            board[i][j] = ' ';
         }
     }
 }
 
-void exibirTabuleiro(char tabuleiro[SIZE][SIZE]) {
+void displayBoard(char board[SIZE][SIZE]) {
     printf("\n");
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
-            printf(" %c ", tabuleiro[i][j]);
+            printf(" %c ", board[i][j]);
             if (j < SIZE - 1) printf("|");
         }
         printf("\n");
@@ -64,45 +64,45 @@ void exibirTabuleiro(char tabuleiro[SIZE][SIZE]) {
     printf("\n");
 }
 
-int verificarVitoria(char tabuleiro[SIZE][SIZE]) {
-    // Verifica linhas
+int checkWin(char board[SIZE][SIZE]) {
+    // Check rows
     for (int i = 0; i < SIZE; i++) {
-        if (tabuleiro[i][0] != ' ' &&
-            tabuleiro[i][0] == tabuleiro[i][1] &&
-            tabuleiro[i][1] == tabuleiro[i][2]) {
+        if (board[i][0] != ' ' &&
+            board[i][0] == board[i][1] &&
+            board[i][1] == board[i][2]) {
             return 1;
         }
     }
 
-    // Verifica colunas
+    // Check columns
     for (int i = 0; i < SIZE; i++) {
-        if (tabuleiro[0][i] != ' ' &&
-            tabuleiro[0][i] == tabuleiro[1][i] &&
-            tabuleiro[1][i] == tabuleiro[2][i]) {
+        if (board[0][i] != ' ' &&
+            board[0][i] == board[1][i] &&
+            board[1][i] == board[2][i]) {
             return 1;
         }
     }
 
-    // Verifica diagonais
-    if (tabuleiro[0][0] != ' ' &&
-        tabuleiro[0][0] == tabuleiro[1][1] &&
-        tabuleiro[1][1] == tabuleiro[2][2]) {
+    // Check diagonals
+    if (board[0][0] != ' ' &&
+        board[0][0] == board[1][1] &&
+        board[1][1] == board[2][2]) {
         return 1;
     }
 
-    if (tabuleiro[0][2] != ' ' &&
-        tabuleiro[0][2] == tabuleiro[1][1] &&
-        tabuleiro[1][1] == tabuleiro[2][0]) {
+    if (board[0][2] != ' ' &&
+        board[0][2] == board[1][1] &&
+        board[1][1] == board[2][0]) {
         return 1;
     }
 
     return 0;
 }
 
-int verificarEmpate(char tabuleiro[SIZE][SIZE]) {
+int checkDraw(char board[SIZE][SIZE]) {
     for (int i = 0; i < SIZE; i++) {
         for (int j = 0; j < SIZE; j++) {
-            if (tabuleiro[i][j] == ' ') {
+            if (board[i][j] == ' ') {
                 return 0;
             }
         }
@@ -110,18 +110,18 @@ int verificarEmpate(char tabuleiro[SIZE][SIZE]) {
     return 1;
 }
 
-void realizarJogada(char tabuleiro[SIZE][SIZE], char jogador) {
-    int linha, coluna;
+void makeMove(char board[SIZE][SIZE], char player) {
+    int row, col;
 
     while (1) {
-        printf("Jogador %c, escolha sua jogada (linha e coluna): ", jogador);
-        scanf("%d %d", &linha, &coluna);
+        printf("Player %c, enter your move (row and column): ", player);
+        scanf("%d %d", &row, &col);
 
-        if (linha >= 1 && linha <= SIZE && coluna >= 1 && coluna <= SIZE && tabuleiro[linha - 1][coluna - 1] == ' ') {
-            tabuleiro[linha - 1][coluna - 1] = jogador;
+        if (row >= 1 && row <= SIZE && col >= 1 && col <= SIZE && board[row - 1][col - 1] == ' ') {
+            board[row - 1][col - 1] = player;
             break;
         } else {
-            printf("Jogada inválida! Tente novamente.\n");
+            printf("Invalid move! Try again.\n");
         }
     }
 }
